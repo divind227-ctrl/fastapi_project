@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fastapi_project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0B0F14;
+    --panel: #151B22;
+    --line: #2A333C;
+    --text: #E8E6E1;
+    --muted: #7C8892;
+    --brass: #C9A227;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .scene{
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 6vw;
+  }
+
+  .orb{
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(10px);
+    animation: drift 14s ease-in-out infinite;
+  }
+  .orb-a{
+    width: 38vw; height: 38vw;
+    top: -10%; left: -8%;
+    background: radial-gradient(circle, rgba(201,162,39,0.14), transparent 70%);
+  }
+  .orb-b{
+    width: 30vw; height: 30vw;
+    bottom: -12%; right: -6%;
+    background: radial-gradient(circle, rgba(122,153,168,0.10), transparent 70%);
+    animation-delay: -6s;
+  }
+
+  @keyframes drift{
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    50%  { transform: translate3d(-2%, 3%, 0) scale(1.05); }
+    100% { transform: translate3d(0,0,0) scale(1); }
+  }
+
+  .stage{
+    perspective: 1200px;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .card{
+    transform-style: preserve-3d;
+    background: linear-gradient(160deg, var(--panel), #10151B);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 3rem 2.6rem;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 2px 0 rgba(255,255,255,0.02) inset;
+    opacity: 0;
+    transform: perspective(1200px) rotateX(8deg) rotateY(-10deg);
+    transition: opacity 700ms ease, transform 700ms ease;
+  }
+
+  .card.entered{
+    opacity: 1;
+  }
+
+  .layer{
+    transform-style: preserve-3d;
+  }
+
+  .bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    transform: translateZ(50px);
+  }
+
+  .project{
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  .status{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .dot{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brass);
+    box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0.6);
+    animation: pulse 1.8s ease-out 1;
+  }
+
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0.55); }
+    70%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 12px rgba(201,162,39,0); }
+    100%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0); }
+  }
+
+  .head{
+    transform: translateZ(70px);
+  }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4.6vw, 2.7rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.1rem 0;
+    max-width: 15ch;
+  }
+
+  h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--brass);
+  }
+
+  p.lede{
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 42ch;
+    margin: 0 0 2.4rem 0;
+  }
+
+  .readout{
+    transform: translateZ(40px);
+    border-top: 1px solid var(--line);
+    padding-top: 1.3rem;
+  }
+
+  .row{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.45rem 0;
+  }
+
+  .row .k{ color: var(--muted); }
+  .row .v{ color: var(--text); }
+  .row .v.ok{ color: var(--brass); }
+
+  footer{
+    transform: translateZ(20px);
+    margin-top: 2.4rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  footer span{ color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce){
+    .dot, .orb{ animation: none; }
+    .card{ transition: opacity 300ms ease; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="scene">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+
+    <div class="stage">
+      <div class="card" id="card">
+        <div class="layer bar">
+          <span class="project">fastapi_project</span>
+          <span class="status"><span class="dot"></span>live</span>
+        </div>
+
+        <div class="layer head">
+          <h1>Hi, this is a <em>test</em> message.</h1>
+          <p class="lede">
+            Your index route rendered correctly. This page replaces the
+            default scaffold with a small status readout so you can see
+            exactly what the server sent back.
+          </p>
+        </div>
+
+        <div class="layer readout">
+          <div class="row"><span class="k">route</span><span class="v">GET /</span></div>
+          <div class="row"><span class="k">status</span><span class="v ok">200 OK</span></div>
+          <div class="row"><span class="k">response time</span><span class="v" id="ms">0 ms</span></div>
+          <div class="row"><span class="k">served at</span><span class="v" id="time">—</span></div>
+        </div>
+
+        <footer class="layer">
+          Edit <span>index.html</span> to change what's shown here.
+        </footer>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const card = document.getElementById('card');
+  const stage = document.querySelector('.stage');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  requestAnimationFrame(() => {
+    setTimeout(() => card.classList.add('entered'), 60);
+  });
+
+  if (!reduceMotion){
+    stage.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const ry = (px - 0.5) * 14;
+      const rx = (0.5 - py) * 10;
+      card.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    stage.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+    });
+  }
+
+  function paintTime(){
+    document.getElementById('time').textContent =
+      new Date().toLocaleTimeString([], { hour12: false });
+  }
+  paintTime();
+  setInterval(paintTime, 1000);
+
+  (function countUp(){
+    const target = 8 + Math.floor(Math.random() * 20);
+    const el = document.getElementById('ms');
+    let current = 0;
+    const step = () => {
+      current += Math.max(1, Math.round((target - current) / 4));
+      if (current >= target){ el.textContent = target + ' ms'; return; }
+      el.textContent = current + ' ms';
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  })();
+</script>
+
+</body>
+</html>
