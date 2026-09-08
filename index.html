@@ -3,28 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>fastapi_project</title>
+<title>For You</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink: #0B0F14;
-    --panel: #151B22;
-    --line: #2A333C;
-    --text: #E8E6E1;
-    --muted: #7C8892;
-    --brass: #C9A227;
+    --sky-1: #EAF6FF;
+    --sky-2: #D3ECFA;
+    --sky-3: #BFE3F5;
+    --white: #FFFFFF;
+    --ink: #2B3A45;
+    --muted: #6C8494;
+    --rose: #FF8FA3;
+    --rose-deep: #F26E86;
   }
 
   *{ box-sizing: border-box; }
 
   html, body{
     margin: 0;
-    background: var(--ink);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    background: linear-gradient(160deg, var(--sky-1), var(--sky-2) 55%, var(--sky-3));
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
     overflow-x: hidden;
   }
 
@@ -32,239 +34,229 @@
     position: relative;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 6vh 6vw;
+    padding: 8vh 6vw 10vh;
+    text-align: center;
   }
 
-  .orb{
+  /* ambient floating hearts */
+  .float-heart{
     position: absolute;
-    border-radius: 50%;
+    bottom: -10%;
+    opacity: 0.35;
+    animation: rise linear infinite;
     pointer-events: none;
-    filter: blur(10px);
-    animation: drift 14s ease-in-out infinite;
-  }
-  .orb-a{
-    width: 38vw; height: 38vw;
-    top: -10%; left: -8%;
-    background: radial-gradient(circle, rgba(201,162,39,0.14), transparent 70%);
-  }
-  .orb-b{
-    width: 30vw; height: 30vw;
-    bottom: -12%; right: -6%;
-    background: radial-gradient(circle, rgba(122,153,168,0.10), transparent 70%);
-    animation-delay: -6s;
   }
 
-  @keyframes drift{
-    0%   { transform: translate3d(0,0,0) scale(1); }
-    50%  { transform: translate3d(-2%, 3%, 0) scale(1.05); }
-    100% { transform: translate3d(0,0,0) scale(1); }
+  @keyframes rise{
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.35; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
   }
 
-  .stage{
-    perspective: 1200px;
-    width: 100%;
-    max-width: 640px;
-  }
-
-  .card{
-    transform-style: preserve-3d;
-    background: linear-gradient(160deg, var(--panel), #10151B);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 3rem 2.6rem;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 2px 0 rgba(255,255,255,0.02) inset;
-    opacity: 0;
-    transform: perspective(1200px) rotateX(8deg) rotateY(-10deg);
-    transition: opacity 700ms ease, transform 700ms ease;
-  }
-
-  .card.entered{
-    opacity: 1;
-  }
-
-  .layer{
-    transform-style: preserve-3d;
-  }
-
-  .bar{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-    transform: translateZ(50px);
-  }
-
-  .project{
-    font-size: 0.85rem;
+  .eyebrow{
+    font-size: 0.9rem;
     color: var(--muted);
-    letter-spacing: 0.01em;
-  }
-
-  .status{
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .dot{
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--brass);
-    box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0.6);
-    animation: pulse 1.8s ease-out 1;
-  }
-
-  @keyframes pulse{
-    0%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0.55); }
-    70%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 12px rgba(201,162,39,0); }
-    100%{ box-shadow: 0 0 12px 2px rgba(201,162,39,0.5), 0 0 0 0 rgba(201,162,39,0); }
-  }
-
-  .head{
-    transform: translateZ(70px);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.8rem;
   }
 
   h1{
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: clamp(1.9rem, 4.6vw, 2.7rem);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin: 0 0 1.1rem 0;
-    max-width: 15ch;
-  }
-
-  h1 em{
+    font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-weight: 400;
-    color: var(--brass);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    line-height: 1.25;
+    margin: 0 0 1rem 0;
+    max-width: 16ch;
+    color: var(--ink);
   }
 
   p.lede{
-    font-size: 1rem;
-    line-height: 1.65;
+    font-size: 1.05rem;
     color: var(--muted);
-    max-width: 42ch;
-    margin: 0 0 2.4rem 0;
+    max-width: 40ch;
+    margin: 0 0 3.2rem 0;
+    line-height: 1.6;
   }
 
-  .readout{
-    transform: translateZ(40px);
-    border-top: 1px solid var(--line);
-    padding-top: 1.3rem;
-  }
-
-  .row{
+  .hearts{
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    padding: 0.45rem 0;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+    justify-content: center;
+    max-width: 520px;
+    margin-bottom: 2.4rem;
   }
 
-  .row .k{ color: var(--muted); }
-  .row .v{ color: var(--text); }
-  .row .v.ok{ color: var(--brass); }
+  .heart-btn{
+    position: relative;
+    width: 78px;
+    height: 70px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .heart-btn svg{
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 6px 14px rgba(242,110,134,0.25));
+    transition: transform 220ms ease;
+  }
+
+  .heart-btn:hover svg,
+  .heart-btn:focus-visible svg{
+    transform: scale(1.08);
+  }
+
+  .heart-btn.used svg{
+    opacity: 0.55;
+  }
+
+  .heart-btn:focus-visible{
+    outline: 2px solid var(--rose-deep);
+    outline-offset: 4px;
+    border-radius: 50%;
+  }
+
+  .card{
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 18px;
+    padding: 2.2rem 2.4rem;
+    max-width: 420px;
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 24px 50px -20px rgba(90,140,170,0.35);
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: opacity 320ms ease, transform 320ms ease;
+  }
+
+  .card.show{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .card p{
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .card p.apology{
+    color: var(--rose-deep);
+  }
 
   footer{
-    transform: translateZ(20px);
-    margin-top: 2.4rem;
-    font-size: 0.78rem;
+    margin-top: 3rem;
+    font-size: 0.82rem;
     color: var(--muted);
   }
 
-  footer span{ color: var(--text); }
-
   @media (prefers-reduced-motion: reduce){
-    .dot, .orb{ animation: none; }
-    .card{ transition: opacity 300ms ease; transform: none !important; }
+    .float-heart{ animation: none; opacity: 0.15; }
   }
 </style>
 </head>
 <body>
 
-  <div class="scene">
-    <div class="orb orb-a"></div>
-    <div class="orb orb-b"></div>
+  <div class="scene" id="scene">
 
-    <div class="stage">
-      <div class="card" id="card">
-        <div class="layer bar">
-          <span class="project">fastapi_project</span>
-          <span class="status"><span class="dot"></span>live</span>
-        </div>
+    <span class="eyebrow">a little something for you</span>
+    <h1>Every heart here holds<br>a piece of how I feel.</h1>
+    <p class="lede">Touch a heart, one at a time — each one has something I wanted to tell you.</p>
 
-        <div class="layer head">
-          <h1>Hi, this is a <em>test</em> message.</h1>
-          <p class="lede">
-            Your index route rendered correctly. This page replaces the
-            default scaffold with a small status readout so you can see
-            exactly what the server sent back.
-          </p>
-        </div>
-
-        <div class="layer readout">
-          <div class="row"><span class="k">route</span><span class="v">GET /</span></div>
-          <div class="row"><span class="k">status</span><span class="v ok">200 OK</span></div>
-          <div class="row"><span class="k">response time</span><span class="v" id="ms">0 ms</span></div>
-          <div class="row"><span class="k">served at</span><span class="v" id="time">—</span></div>
-        </div>
-
-        <footer class="layer">
-          Edit <span>index.html</span> to change what's shown here.
-        </footer>
-      </div>
+    <div class="hearts" id="hearts">
+      <button class="heart-btn" data-msg="0" aria-label="Heart 1">
+        <svg viewBox="0 0 32 29"><path fill="#FF8FA3" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
+      </button>
+      <button class="heart-btn" data-msg="1" aria-label="Heart 2">
+        <svg viewBox="0 0 32 29"><path fill="#7FC8E8" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
+      </button>
+      <button class="heart-btn" data-msg="2" aria-label="Heart 3">
+        <svg viewBox="0 0 32 29"><path fill="#FFC1CC" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
+      </button>
+      <button class="heart-btn" data-msg="3" aria-label="Heart 4">
+        <svg viewBox="0 0 32 29"><path fill="#A7DAF0" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
+      </button>
+      <button class="heart-btn" data-msg="4" aria-label="Heart 5">
+        <svg viewBox="0 0 32 29"><path fill="#F26E86" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
+      </button>
     </div>
+
+    <div class="card" id="card">
+      <p id="cardText"></p>
+    </div>
+
+    <footer>tap each heart once — they don't repeat</footer>
   </div>
 
 <script>
-  const card = document.getElementById('card');
-  const stage = document.querySelector('.stage');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const messages = [
+    "You're so cute, it genuinely catches me off guard sometimes.",
+    "Even your moods are part of you, and I love all of it.",
+    "You're my angel.",
+    "You're my motivation.",
+  ];
+  const apology = "And I'm sorry for hurting you. That was never what I wanted.";
 
-  requestAnimationFrame(() => {
-    setTimeout(() => card.classList.add('entered'), 60);
+  const buttons = document.querySelectorAll('.heart-btn');
+  const card = document.getElementById('card');
+  const cardText = document.getElementById('cardText');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('used')) return;
+      btn.classList.add('used');
+
+      const idx = Number(btn.dataset.msg);
+      const isLast = idx === 4;
+      const text = isLast ? apology : messages[idx];
+
+      card.classList.remove('show');
+      cardText.classList.toggle('apology', isLast);
+      setTimeout(() => {
+        cardText.textContent = text;
+        card.classList.add('show');
+      }, 160);
+    });
   });
 
+  // ambient floating hearts
+  const scene = document.getElementById('scene');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const colors = ['#FF8FA3', '#7FC8E8', '#FFC1CC', '#A7DAF0'];
+
+  function spawnHeart(){
+    const el = document.createElement('div');
+    el.className = 'float-heart';
+    const size = 14 + Math.random() * 16;
+    const left = Math.random() * 100;
+    const duration = 10 + Math.random() * 8;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.left = left + 'vw';
+    el.style.animationDuration = duration + 's';
+    el.innerHTML = `<svg width="${size}" height="${size * 0.9}" viewBox="0 0 32 29"><path fill="${color}" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z"/></svg>`;
+    scene.appendChild(el);
+    setTimeout(() => el.remove(), duration * 1000);
+  }
+
   if (!reduceMotion){
-    stage.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width;
-      const py = (e.clientY - rect.top) / rect.height;
-      const ry = (px - 0.5) * 14;
-      const rx = (0.5 - py) * 10;
-      card.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-    });
-    stage.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-    });
+    for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 900);
+    setInterval(spawnHeart, 1600);
   }
-
-  function paintTime(){
-    document.getElementById('time').textContent =
-      new Date().toLocaleTimeString([], { hour12: false });
-  }
-  paintTime();
-  setInterval(paintTime, 1000);
-
-  (function countUp(){
-    const target = 8 + Math.floor(Math.random() * 20);
-    const el = document.getElementById('ms');
-    let current = 0;
-    const step = () => {
-      current += Math.max(1, Math.round((target - current) / 4));
-      if (current >= target){ el.textContent = target + ' ms'; return; }
-      el.textContent = current + ' ms';
-      requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  })();
 </script>
 
 </body>
