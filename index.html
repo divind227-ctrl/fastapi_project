@@ -30,31 +30,19 @@
     overflow-x: hidden;
   }
 
-  .scene{
+  .field{
     position: relative;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
     padding: 8vh 6vw 10vh;
+  }
+
+  .intro{
+    position: relative;
+    z-index: 3;
     text-align: center;
-  }
-
-  /* ambient floating hearts */
-  .float-heart{
-    position: absolute;
-    bottom: -10%;
-    opacity: 0.35;
-    animation: rise linear infinite;
-    pointer-events: none;
-  }
-
-  @keyframes rise{
-    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
-    10%  { opacity: 0.35; }
-    90%  { opacity: 0.2; }
-    100% { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
+    max-width: 560px;
+    margin: 0 auto 2rem;
   }
 
   .eyebrow{
@@ -62,60 +50,95 @@
     color: var(--muted);
     letter-spacing: 0.02em;
     margin-bottom: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 700ms ease forwards;
   }
 
   h1{
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-weight: 500;
-    font-size: clamp(2.1rem, 6vw, 3.4rem);
-    line-height: 1.25;
+    font-size: clamp(2rem, 5.6vw, 3.2rem);
+    line-height: 1.28;
     margin: 0 0 1rem 0;
-    max-width: 16ch;
     color: var(--ink);
+    opacity: 0;
+    animation: fadeUp 700ms ease 120ms forwards;
   }
 
   p.lede{
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     color: var(--muted);
-    max-width: 40ch;
-    margin: 0 0 3.2rem 0;
-    line-height: 1.6;
+    max-width: 42ch;
+    margin: 0 auto;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fadeUp 700ms ease 240ms forwards;
   }
 
-  .hearts{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.4rem;
-    justify-content: center;
-    max-width: 520px;
-    margin-bottom: 2.4rem;
+  .progress{
+    margin-top: 1.4rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    opacity: 0;
+    animation: fadeUp 700ms ease 360ms forwards;
+  }
+
+  .progress b{ color: var(--rose-deep); }
+
+  @keyframes fadeUp{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  /* scattered heart field */
+  .heart-field{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    height: 60vh;
+    min-height: 420px;
+    margin: 0 auto;
   }
 
   .heart-btn{
-    position: relative;
-    width: 78px;
-    height: 70px;
+    position: absolute;
     border: none;
     background: transparent;
     cursor: pointer;
     padding: 0;
+    opacity: 0;
+    transform: translateY(14px) scale(0.7);
+    animation: pop 560ms cubic-bezier(.2,.8,.3,1.3) forwards, bob 5s ease-in-out infinite;
+    animation-delay: var(--delay), var(--delay);
+  }
+
+  @keyframes pop{
+    to{ opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes bob{
+    0%, 100%{ transform: translateY(0) scale(1); }
+    50%{ transform: translateY(-10px) scale(1); }
   }
 
   .heart-btn svg{
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 6px 14px rgba(242,110,134,0.25));
-    transition: transform 220ms ease;
+    filter: drop-shadow(0 8px 16px rgba(242,110,134,0.25));
+    transition: transform 220ms ease, filter 220ms ease;
   }
 
   .heart-btn:hover svg,
   .heart-btn:focus-visible svg{
-    transform: scale(1.08);
+    transform: scale(1.14);
+    filter: drop-shadow(0 10px 20px rgba(242,110,134,0.4));
   }
 
   .heart-btn.used svg{
-    opacity: 0.55;
+    opacity: 0.4;
   }
 
   .heart-btn:focus-visible{
@@ -124,25 +147,40 @@
     border-radius: 50%;
   }
 
-  .card{
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.6);
-    border-radius: 18px;
-    padding: 2.2rem 2.4rem;
-    max-width: 420px;
-    min-height: 96px;
+  /* modal card */
+  .overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(43,58,69,0.25);
+    backdrop-filter: blur(2px);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 24px 50px -20px rgba(90,140,170,0.35);
+    padding: 6vw;
     opacity: 0;
-    transform: translateY(10px) scale(0.98);
-    transition: opacity 320ms ease, transform 320ms ease;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+    z-index: 10;
   }
 
-  .card.show{
+  .overlay.show{
     opacity: 1;
+    pointer-events: auto;
+  }
+
+  .card{
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 20px;
+    padding: 2.6rem 2.6rem;
+    max-width: 440px;
+    box-shadow: 0 30px 60px -20px rgba(60,100,130,0.4);
+    text-align: center;
+    transform: translateY(16px) scale(0.96);
+    transition: transform 280ms cubic-bezier(.2,.8,.3,1.2);
+  }
+
+  .overlay.show .card{
     transform: translateY(0) scale(1);
   }
 
@@ -150,8 +188,8 @@
     margin: 0;
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-size: 1.35rem;
-    line-height: 1.5;
+    font-size: 1.4rem;
+    line-height: 1.55;
     color: var(--ink);
   }
 
@@ -159,103 +197,175 @@
     color: var(--rose-deep);
   }
 
+  .card button{
+    margin-top: 1.6rem;
+    border: none;
+    background: var(--rose-deep);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 160ms ease, background 160ms ease;
+  }
+
+  .card button:hover{
+    transform: translateY(-1px);
+    background: #E85B76;
+  }
+
+  /* ambient floating hearts */
+  .float-heart{
+    position: absolute;
+    bottom: -10%;
+    opacity: 0.3;
+    animation: rise linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes rise{
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.3; }
+    90%  { opacity: 0.15; }
+    100% { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
+  }
+
   footer{
-    margin-top: 3rem;
-    font-size: 0.82rem;
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.8rem;
     color: var(--muted);
   }
 
+  @media (max-width: 640px){
+    .heart-field{ height: 66vh; min-height: 480px; }
+  }
+
   @media (prefers-reduced-motion: reduce){
-    .float-heart{ animation: none; opacity: 0.15; }
+    .float-heart{ animation: none; opacity: 0.12; }
+    .heart-btn{ animation: pop 400ms ease forwards; }
+    .eyebrow, h1, p.lede, .progress{ animation: none; opacity: 1; }
   }
 </style>
 </head>
 <body>
 
-  <div class="scene" id="scene">
+  <div class="field" id="field">
 
-    <span class="eyebrow">a little something for you</span>
-    <h1>Every heart here holds<br>a piece of how I feel.</h1>
-    <p class="lede">Touch a heart, one at a time — each one has something I wanted to tell you.</p>
-
-    <div class="hearts" id="hearts">
-      <button class="heart-btn" data-msg="0" aria-label="Heart 1">
-        <svg viewBox="0 0 32 29"><path fill="#FF8FA3" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
-      </button>
-      <button class="heart-btn" data-msg="1" aria-label="Heart 2">
-        <svg viewBox="0 0 32 29"><path fill="#7FC8E8" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
-      </button>
-      <button class="heart-btn" data-msg="2" aria-label="Heart 3">
-        <svg viewBox="0 0 32 29"><path fill="#FFC1CC" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
-      </button>
-      <button class="heart-btn" data-msg="3" aria-label="Heart 4">
-        <svg viewBox="0 0 32 29"><path fill="#A7DAF0" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
-      </button>
-      <button class="heart-btn" data-msg="4" aria-label="Heart 5">
-        <svg viewBox="0 0 32 29"><path fill="#F26E86" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>
-      </button>
+    <div class="intro">
+      <span class="eyebrow">a little something for you</span>
+      <h1>Every heart here holds<br>a piece of how I feel.</h1>
+      <p class="lede">Touch each one, whenever you want. They're all different, and none of them repeat.</p>
+      <div class="progress"><b id="foundCount">0</b> of 9 found</div>
     </div>
 
-    <div class="card" id="card">
+    <div class="heart-field" id="heartField"></div>
+
+    <footer>made for you, one heart at a time</footer>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="card">
       <p id="cardText"></p>
+      <button id="closeCard">close</button>
     </div>
-
-    <footer>tap each heart once — they don't repeat</footer>
   </div>
 
 <script>
   const messages = [
-    "You're so cute, it genuinely catches me off guard sometimes.",
+    "You're so cute — it genuinely catches me off guard sometimes.",
     "Even your moods are part of you, and I love all of it.",
     "You're my angel.",
     "You're my motivation.",
+    "Your eyes are what I fell for first, and honestly, even your feet are something I've come to think are beautiful.",
+    "Your hair falls like a quiet waterfall, and I could watch it forever.",
+    "You never once asked me for anything expensive. You never asked for much at all.",
+    "I promise I'll make more time for you — that's not just words.",
   ];
   const apology = "And I'm sorry for hurting you. That was never what I wanted.";
+  const allMessages = [...messages, apology];
 
-  const buttons = document.querySelectorAll('.heart-btn');
-  const card = document.getElementById('card');
+  // scattered, non-overlapping-ish positions (top%, left%, size px)
+  const positions = [
+    { top: 6,  left: 12, size: 62 },
+    { top: 18, left: 70, size: 74 },
+    { top: 38, left: 6,  size: 58 },
+    { top: 30, left: 44, size: 66 },
+    { top: 55, left: 78, size: 60 },
+    { top: 66, left: 24, size: 70 },
+    { top: 8,  left: 46, size: 54 },
+    { top: 78, left: 55, size: 64 },
+    { top: 48, left: 90, size: 56 },
+  ];
+
+  const colors = ['#FF8FA3', '#7FC8E8', '#FFC1CC', '#A7DAF0', '#F26E86', '#9AD4EE', '#FFB3C1', '#8FCBE8', '#F26E86'];
+
+  const heartField = document.getElementById('heartField');
+  const overlay = document.getElementById('overlay');
   const cardText = document.getElementById('cardText');
+  const foundCount = document.getElementById('foundCount');
+  let found = 0;
 
-  buttons.forEach(btn => {
+  positions.forEach((pos, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'heart-btn';
+    btn.style.top = pos.top + '%';
+    btn.style.left = pos.left + '%';
+    btn.style.width = pos.size + 'px';
+    btn.style.height = (pos.size * 0.9) + 'px';
+    btn.style.setProperty('--delay', (0.4 + i * 0.09) + 's');
+    btn.setAttribute('aria-label', 'Heart ' + (i + 1));
+    btn.innerHTML = `<svg viewBox="0 0 32 29"><path fill="${colors[i]}" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z" transform="translate(-2,-1)"/></svg>`;
+
     btn.addEventListener('click', () => {
       if (btn.classList.contains('used')) return;
       btn.classList.add('used');
+      found++;
+      foundCount.textContent = found;
 
-      const idx = Number(btn.dataset.msg);
-      const isLast = idx === 4;
-      const text = isLast ? apology : messages[idx];
-
-      card.classList.remove('show');
+      const isLast = i === positions.length - 1;
+      cardText.textContent = allMessages[i];
       cardText.classList.toggle('apology', isLast);
-      setTimeout(() => {
-        cardText.textContent = text;
-        card.classList.add('show');
-      }, 160);
+      overlay.classList.add('show');
     });
+
+    heartField.appendChild(btn);
   });
 
-  // ambient floating hearts
-  const scene = document.getElementById('scene');
+  document.getElementById('closeCard').addEventListener('click', () => {
+    overlay.classList.remove('show');
+  });
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('show');
+  });
+
+  // ambient floating hearts across whole page
+  const field = document.getElementById('field');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const colors = ['#FF8FA3', '#7FC8E8', '#FFC1CC', '#A7DAF0'];
+  const ambientColors = ['#FF8FA3', '#7FC8E8', '#FFC1CC', '#A7DAF0'];
 
   function spawnHeart(){
     const el = document.createElement('div');
     el.className = 'float-heart';
-    const size = 14 + Math.random() * 16;
+    const size = 12 + Math.random() * 16;
     const left = Math.random() * 100;
-    const duration = 10 + Math.random() * 8;
-    const color = colors[Math.floor(Math.random() * colors.length)];
+    const duration = 11 + Math.random() * 8;
+    const color = ambientColors[Math.floor(Math.random() * ambientColors.length)];
     el.style.left = left + 'vw';
     el.style.animationDuration = duration + 's';
     el.innerHTML = `<svg width="${size}" height="${size * 0.9}" viewBox="0 0 32 29"><path fill="${color}" d="M16 29S2 19.4 2 10.2C2 4.6 6.2 1 10.9 1c2.8 0 5 1.4 6.1 3.5C18.1 2.4 20.3 1 23.1 1 27.8 1 32 4.6 32 10.2 32 19.4 16 29 16 29z"/></svg>`;
-    scene.appendChild(el);
+    field.appendChild(el);
     setTimeout(() => el.remove(), duration * 1000);
   }
 
   if (!reduceMotion){
-    for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 900);
-    setInterval(spawnHeart, 1600);
+    for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 800);
+    setInterval(spawnHeart, 1500);
   }
 </script>
 
